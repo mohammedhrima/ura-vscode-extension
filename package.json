@@ -1,7 +1,7 @@
 {
   "name": "pandu",
   "displayName": "Pandu Language Support",
-  "description": "Syntax highlighting and smart indentation for Pandu programming language (.pa files)",
+  "description": "Syntax highlighting and smart indentation for Pandu programming language (.pn files)",
   "version": "0.0.1",
   "publisher": "mohamedhrima",
   "author": {
@@ -38,7 +38,7 @@
           "pandu"
         ],
         "extensions": [
-          ".pa"
+          ".pn"
         ],
         "configuration": "./language-configuration.json"
       }

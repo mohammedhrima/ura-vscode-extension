@@ -100,7 +100,7 @@ func int main():
 
 ## 🎨 File Icons
 
-Custom `.pa` file icons are included but optional:
+Custom `.pn` file icons are included but optional:
 
 1. Open Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`)
 2. Select **"Preferences: File Icon Theme"** → **"Pandu Icons"**
@@ -111,11 +111,11 @@ Custom `.pa` file icons are included but optional:
 ## 📦 Installation
 
 1. **From Marketplace:** Search for **"Pandu"** in Extensions (`Ctrl+Shift+X`)
-2. **Command Palette:** `ext install mohamedhrima.pandu`
+2. **Command Palette:** `ext install mohamedhrima.pnndu`
 
 ## 🚀 Getting Started
 
-1. Create a new file with `.pa` extension
+1. Create a new file with `.pn` extension
 2. Start coding in Pandu - syntax highlighting will activate automatically
 3. Use `Tab` for 4-space indentation (configured automatically)
 

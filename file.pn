@@ -9,3 +9,6 @@ struct User:
 
 main():
     User user
+    int a = 12
+    if a == 10:
+        a = 12

@@ -39,5 +39,5 @@ if [ -d "$EXTENSIONS_DIR/${EXT_NAME}-${VERSION}/extension" ]; then
 fi
 
 echo "=== Step 5: Done! Reload VSCode to see your extension ==="
-echo "You can now open a .pa file to test syntax highlighting and icon."
+echo "You can now open a .pn file to test syntax highlighting and icon."
 
