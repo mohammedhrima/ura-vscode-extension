@@ -1,0 +1,147 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "pandu",
+  "scopeName": "source.pandu",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#characters" },
+    { "include": "#numbers" },
+    { "include": "#keywords" },
+    { "include": "#declarations" },
+    { "include": "#library" },
+    { "include": "#types" },
+    { "include": "#struct_definitions" },
+    { "include": "#custom_types" },
+    { "include": "#booleans" },
+    { "include": "#operators" },
+    { "include": "#functions" },
+    { "include": "#variables" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.pandu",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.pandu",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.pandu",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.pandu",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "characters": {
+      "patterns": [
+        {
+          "name": "string.quoted.single.pandu",
+          "match": "'(\\\\.|[^\\\\'])'"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.float.pandu",
+          "match": "\\b\\d+\\.\\d+([eE][+-]?\\d+)?\\b"
+        },
+        {
+          "name": "constant.numeric.integer.pandu",
+          "match": "\\b\\d+\\b"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.pandu",
+          "match": "\\b(if|elif|else|while|for|return)\\b"
+        }
+      ]
+    },
+    "declarations": {
+      "patterns": [
+        {
+          "name": "keyword.declaration.pandu",
+          "match": "\\b(struct|func)\\b"
+        }
+      ]
+    },
+    "library": {
+      "patterns": [
+        {
+          "name": "keyword.library.pandu",
+          "match": "\\b(use|proto)\\b"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "storage.type.pandu",
+          "match": "\\b(int|float|double|char|void|long|short|unsigned|signed)\\b"
+        }
+      ]
+    },
+    "struct_definitions": {
+      "patterns": [
+        {
+          "name": "entity.name.type.struct.pandu",
+          "match": "(?<=\\bstruct\\s+)([A-Z][a-zA-Z0-9_]*)(?=\\s*:)"
+        }
+      ]
+    },
+    "custom_types": {
+      "patterns": [
+        {
+          "name": "entity.name.type.pandu",
+          "match": "\\b([A-Z][a-zA-Z0-9_]*)(?=\\s+[a-z][a-zA-Z0-9_]*\\b)"
+        }
+      ]
+    },
+    "booleans": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.pandu",
+          "match": "\\b(true|false|null)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.control.pandu",
+          "match": "==|!=|<=|>=|\\+|-|\\*|/|%|=|<|>|&&|\\|\\||!"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "entity.name.function.pandu",
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()"
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "name": "variable.other.pandu",
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?!\\s*\\()"
+        }
+      ]
+    }
+  }
+}

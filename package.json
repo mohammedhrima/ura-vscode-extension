@@ -1,0 +1,72 @@
+{
+  "name": "pandu",
+  "displayName": "Pandu Language Support",
+  "description": "Syntax highlighting and smart indentation for Pandu programming language (.pa files)",
+  "version": "0.0.1",
+  "publisher": "mohamedhrima",
+  "author": {
+    "name": "Hrima Mohammed"
+  },
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.103.0"
+  },
+  "icon": "icons/icon.png",
+  "categories": [
+    "Programming Languages",
+    "Themes"
+  ],
+  "keywords": [
+    "pandu",
+    "programming language",
+    "syntax highlighting",
+    "language support"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mohamedhrima/pandu-vscode-extension"
+  },
+  "bugs": {
+    "url": "https://github.com/mohamedhrima/pandu-vscode-extension/issues"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "pandu",
+        "aliases": [
+          "Pandu",
+          "pandu"
+        ],
+        "extensions": [
+          ".pa"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "pandu",
+        "scopeName": "source.pandu",
+        "path": "./syntaxes/pandu.tmLanguage.json"
+      }
+    ],
+    "iconThemes": [
+      {
+        "id": "pandu-icons",
+        "label": "Pandu Icons",
+        "path": "./icons/file.json"
+      }
+    ],
+    "configurationDefaults": {
+      "[pandu]": {
+        "editor.autoIndent": "advanced",
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+        "editor.indentSize": 4,
+        "editor.detectIndentation": false,
+        "editor.trimAutoWhitespace": true,
+        "editor.useTabStops": true
+      }
+    }
+  }
+}

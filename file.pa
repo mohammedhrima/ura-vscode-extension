@@ -1,0 +1,11 @@
+
+func int hello(int a):
+    return 12
+
+
+struct User:
+    int a
+    int b
+
+main():
+    User user

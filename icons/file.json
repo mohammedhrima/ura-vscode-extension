@@ -1,0 +1,11 @@
+{
+  "iconDefinitions": {
+    "pandu-file": {
+      "iconPath": "./icon.svg"
+    }
+  },
+  "fileExtensions": {
+    "pa": "pandu-file"
+  },
+  "extends": "material-icon-theme" 
+}
