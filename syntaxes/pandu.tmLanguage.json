@@ -14,6 +14,7 @@
     { "include": "#struct_definitions" },
     { "include": "#custom_types" },
     { "include": "#booleans" },
+    { "include": "#builtins" },
     { "include": "#operators" },
     { "include": "#functions" },
     { "include": "#variables" }
@@ -67,7 +68,7 @@
       "patterns": [
         {
           "name": "keyword.control.pandu",
-          "match": "\\b(if|elif|else|while|for|return)\\b"
+          "match": "\\b(if|elif|else|while|for|return|break|continue|and|or)\\b"
         }
       ]
     },
@@ -91,7 +92,7 @@
       "patterns": [
         {
           "name": "storage.type.pandu",
-          "match": "\\b(int|float|double|char|void|long|short|unsigned|signed)\\b"
+          "match": "\\b(int|float|double|char|void|long|short|unsigned|signed|bool|chars)\\b"
         }
       ]
     },
@@ -115,14 +116,26 @@
       "patterns": [
         {
           "name": "constant.language.boolean.pandu",
-          "match": "\\b(true|false|null)\\b"
+          "match": "\\b(True|False|NULL)\\b"
+        }
+      ]
+    },
+    "builtins": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.pandu",
+          "match": "\\b(output|input|print|println|malloc|free|sizeof|strlen|strcpy|strcmp|memcpy|memset)\\s*(?=\\()"
         }
       ]
     },
     "operators": {
       "patterns": [
         {
-          "name": "keyword.control.pandu",
+          "name": "keyword.operator.arrow.pandu",
+          "match": "->"
+        },
+        {
+          "name": "keyword.operator.pandu",
           "match": "==|!=|<=|>=|\\+|-|\\*|/|%|=|<|>|&&|\\|\\||!"
         }
       ]
