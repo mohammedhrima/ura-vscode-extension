@@ -84,7 +84,7 @@
       "patterns": [
         {
           "name": "keyword.library.pandu",
-          "match": "\\b(use|proto)\\b"
+          "match": "\\b(use|protoFunc)\\b"
         }
       ]
     },

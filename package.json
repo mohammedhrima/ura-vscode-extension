@@ -38,7 +38,8 @@
           "pandu"
         ],
         "extensions": [
-          ".pn"
+          ".pn",
+          ".pnh"
         ],
         "configuration": "./language-configuration.json"
       }
