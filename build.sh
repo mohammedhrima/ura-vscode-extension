@@ -1,43 +1,65 @@
 #!/bin/bash
 
 # Variables
-EXT_NAME="pandu"
+EXT_NAME="ura"
 VERSION="0.0.1"
 VSIX_FILE="${EXT_NAME}-${VERSION}.vsix"
 EXTENSIONS_DIR="$HOME/.vscode/extensions"
+TARGET_DIR="$EXTENSIONS_DIR/mohamedhrima.${EXT_NAME}-${VERSION}"
 
-echo "=== Step 1: Ensure vsce is installed globally ==="
+echo "=== Building Ura VSCode Extension ==="
+
+# Step 1: Check dependencies
+echo "Step 1: Checking dependencies..."
 if ! command -v vsce &> /dev/null; then
-    echo "vsce not found. Installing globally..."
-    npm install -g vsce
+    echo "Installing vsce globally..."
+    npm install -g @vscode/vsce
 else
-    echo "vsce is already installed."
+    echo "✓ vsce is installed"
 fi
 
-echo "=== Step 2: Package the extension ==="
+# Step 2: Clean old builds
+echo "Step 2: Cleaning old builds..."
+rm -f *.vsix
+
+# Step 3: Package the extension
+echo "Step 3: Packaging extension..."
 vsce package
 
 if [ ! -f "$VSIX_FILE" ]; then
-    echo "Error: VSIX file not found!"
+    echo "❌ Error: VSIX file not created!"
     exit 1
 fi
+echo "✓ VSIX created: $VSIX_FILE"
 
-echo "=== Step 3: Remove previous local install ==="
-if [ -d "$EXTENSIONS_DIR/${EXT_NAME}-${VERSION}" ]; then
-    echo "Removing old extension..."
-    rm -rf "$EXTENSIONS_DIR/${EXT_NAME}-${VERSION}"
+# Step 4: Remove old installation
+echo "Step 4: Removing old installation..."
+rm -rf "$EXTENSIONS_DIR"/mohamedhrima.${EXT_NAME}-*
+rm -rf "$EXTENSIONS_DIR"/${EXT_NAME}-*
+echo "✓ Old versions removed"
+
+# Step 5: Install extension
+echo "Step 5: Installing extension..."
+mkdir -p "$TARGET_DIR"
+unzip -q "$VSIX_FILE" -d "$TARGET_DIR"
+
+# Move files if they're in 'extension' subdirectory
+if [ -d "$TARGET_DIR/extension" ]; then
+    mv "$TARGET_DIR/extension/"* "$TARGET_DIR/" 2>/dev/null
+    rmdir "$TARGET_DIR/extension" 2>/dev/null
 fi
 
-echo "=== Step 4: Extract VSIX to extensions folder ==="
-mkdir -p "$EXTENSIONS_DIR/${EXT_NAME}-${VERSION}"
-unzip -q "$VSIX_FILE" -d "$EXTENSIONS_DIR/${EXT_NAME}-${VERSION}"
+echo "✓ Extension installed to: $TARGET_DIR"
 
-# Move contents from 'extension/' up one level if exists
-if [ -d "$EXTENSIONS_DIR/${EXT_NAME}-${VERSION}/extension" ]; then
-    mv "$EXTENSIONS_DIR/${EXT_NAME}-${VERSION}/extension/"* "$EXTENSIONS_DIR/${EXT_NAME}-${VERSION}/"
-    rmdir "$EXTENSIONS_DIR/${EXT_NAME}-${VERSION}/extension"
-fi
-
-echo "=== Step 5: Done! Reload VSCode to see your extension ==="
-echo "You can now open a .pn file to test syntax highlighting and icon."
-
+# Step 6: Verify installation
+echo ""
+echo "=== Installation Complete ==="
+echo "Extension location: $TARGET_DIR"
+echo ""
+echo "Next steps:"
+echo "1. Restart VSCode completely (Cmd+Q then reopen)"
+echo "2. Open a .ura file"
+echo "3. Check language mode in bottom-right corner"
+echo "4. If needed, click language mode and select 'Ura'"
+echo ""
+echo "To uninstall: rm -rf \"$TARGET_DIR\""

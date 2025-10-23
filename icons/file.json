@@ -1,11 +1,11 @@
 {
   "iconDefinitions": {
-    "pandu-file": {
+    "ura-file": {
       "iconPath": "./icon.svg"
     }
   },
   "fileExtensions": {
-    "pa": "pandu-file"
+    "ura": "ura-file"
   },
   "extends": "material-icon-theme" 
 }
