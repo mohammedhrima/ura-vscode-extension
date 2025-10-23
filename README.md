@@ -1,14 +1,12 @@
-<div align="center">
-  <img src="./icons/icon.png" alt="Pandu Logo" width="120" height="120">
+
   
-  # Pandu VSCode Extension
-  
-  *Comprehensive language support for **Pandu** programming language*
-  
-  ![VSCode Marketplace](https://img.shields.io/badge/VSCode-Marketplace-blue?style=flat-square&logo=visual-studio-code)
-  ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
-  ![Version](https://img.shields.io/badge/version-0.0.1-orange?style=flat-square)
-</div>
+# Ura VSCode Extension
+
+*Comprehensive language support for **Ura** programming language*
+
+![VSCode Marketplace](https://img.shields.io/badge/VSCode-Marketplace-blue?style=flat-square&logo=visual-studio-code)
+![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.0.1-orange?style=flat-square)
 
 ---
 
