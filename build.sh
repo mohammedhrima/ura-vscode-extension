@@ -42,34 +42,15 @@ if [ ! -f "$VSIX_FILE" ]; then
 fi
 echo "✓ VSIX created: $VSIX_FILE"
 
-# Step 5: Remove old installation
-echo "Step 5: Removing old installation..."
-rm -rf "$EXTENSIONS_DIR"/mohamedhrima.${EXT_NAME}-*
-rm -rf "$EXTENSIONS_DIR"/${EXT_NAME}-*
-echo "✓ Old versions removed"
-
-# Step 6: Install extension
-echo "Step 6: Installing extension..."
-mkdir -p "$TARGET_DIR"
-unzip -q "$VSIX_FILE" -d "$TARGET_DIR"
-
-# Move files if they're in 'extension' subdirectory
-if [ -d "$TARGET_DIR/extension" ]; then
-    mv "$TARGET_DIR/extension/"* "$TARGET_DIR/" 2>/dev/null
-    rmdir "$TARGET_DIR/extension" 2>/dev/null
-fi
-
-echo "✓ Extension installed to: $TARGET_DIR"
+# Step 5: Install extension (using VSCode CLI for a clean install)
+echo "Step 5: Installing extension..."
+code --install-extension "$VSIX_FILE" --force
+echo "✓ Extension installed"
 
 # Step 7: Verify installation
 echo ""
 echo "=== Installation Complete ==="
-echo "Extension location: $TARGET_DIR"
 echo ""
 echo "Next steps:"
 echo "1. Restart VSCode completely (Cmd+Q then reopen)"
-echo "2. Open a .ura file"
-echo "3. Check language mode in bottom-right corner"
-echo "4. If needed, click language mode and select 'Ura'"
-echo ""
-echo "To uninstall: rm -rf \"$TARGET_DIR\""
+echo "2. Open a .ura file — syntax highlighting, go-to-definition, autocomplete and formatting should all work"
