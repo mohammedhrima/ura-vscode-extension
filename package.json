@@ -11,6 +11,7 @@
   "engines": {
     "vscode": "^1.103.0"
   },
+  "main": "./out/extension.js",
   "icon": "icons/icon.png",
   "categories": [
     "Programming Languages",
@@ -28,6 +29,12 @@
   },
   "bugs": {
     "url": "https://github.com/mohamedhrima/ura-vscode-extension/issues"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.103.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "@vscode/vsce": "^3.0.0"
   },
   "contributes": {
     "languages": [

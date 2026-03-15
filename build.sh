@@ -18,12 +18,22 @@ else
     echo "✓ vsce is installed"
 fi
 
-# Step 2: Clean old builds
-echo "Step 2: Cleaning old builds..."
+# Step 2: Install npm dependencies and compile TypeScript
+echo "Step 2: Installing dependencies and compiling TypeScript..."
+npm install
+npx tsc --noEmit false
+if [ $? -ne 0 ]; then
+    echo "❌ TypeScript compilation failed!"
+    exit 1
+fi
+echo "✓ TypeScript compiled to out/"
+
+# Step 3: Clean old builds
+echo "Step 3: Cleaning old builds..."
 rm -f *.vsix
 
-# Step 3: Package the extension
-echo "Step 3: Packaging extension..."
+# Step 4: Package the extension
+echo "Step 4: Packaging extension..."
 vsce package
 
 if [ ! -f "$VSIX_FILE" ]; then
@@ -32,14 +42,14 @@ if [ ! -f "$VSIX_FILE" ]; then
 fi
 echo "✓ VSIX created: $VSIX_FILE"
 
-# Step 4: Remove old installation
-echo "Step 4: Removing old installation..."
+# Step 5: Remove old installation
+echo "Step 5: Removing old installation..."
 rm -rf "$EXTENSIONS_DIR"/mohamedhrima.${EXT_NAME}-*
 rm -rf "$EXTENSIONS_DIR"/${EXT_NAME}-*
 echo "✓ Old versions removed"
 
-# Step 5: Install extension
-echo "Step 5: Installing extension..."
+# Step 6: Install extension
+echo "Step 6: Installing extension..."
 mkdir -p "$TARGET_DIR"
 unzip -q "$VSIX_FILE" -d "$TARGET_DIR"
 
@@ -51,7 +61,7 @@ fi
 
 echo "✓ Extension installed to: $TARGET_DIR"
 
-# Step 6: Verify installation
+# Step 7: Verify installation
 echo ""
 echo "=== Installation Complete ==="
 echo "Extension location: $TARGET_DIR"

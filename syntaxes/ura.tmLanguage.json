@@ -4,9 +4,11 @@
   "scopeName": "source.ura",
   "patterns": [
     { "include": "#comments" },
+    { "include": "#imports" },
     { "include": "#strings" },
     { "include": "#characters" },
     { "include": "#numbers" },
+    { "include": "#special_methods" },
     { "include": "#keywords" },
     { "include": "#declarations" },
     { "include": "#library" },
@@ -30,6 +32,20 @@
           "name": "comment.block.ura",
           "begin": "/\\*",
           "end": "\\*/"
+        }
+      ]
+    },
+
+    "imports": {
+      "patterns": [
+        {
+          "comment": "use \"@/module\" or use \"./module\" — highlight path distinctly",
+          "name": "meta.import.ura",
+          "match": "\\b(use)\\s+(\"[^\"]+\")",
+          "captures": {
+            "1": { "name": "keyword.library.ura" },
+            "2": { "name": "string.quoted.double.import.ura" }
+          }
         }
       ]
     },
@@ -85,11 +101,24 @@
       ]
     },
 
+    "special_methods": {
+      "patterns": [
+        {
+          "comment": "fn init / fn clean — constructor/destructor methods",
+          "match": "\\b(fn)\\s+(init|clean)\\b",
+          "captures": {
+            "1": { "name": "keyword.declaration.ura" },
+            "2": { "name": "keyword.other.special-method.ura" }
+          }
+        }
+      ]
+    },
+
     "keywords": {
       "patterns": [
         {
           "name": "keyword.control.ura",
-          "match": "\\b(if|elif|else|while|for|return|break|continue|and|or|is|not)\\b"
+          "match": "\\b(if|elif|else|while|for|return|break|continue|and|or|is|not|self|main)\\b"
         }
       ]
     },
@@ -147,7 +176,7 @@
       "patterns": [
         {
           "name": "constant.language.boolean.ura",
-          "match": "\\b(true|false|NULL)\\b"
+          "match": "\\b(True|False|NULL)\\b"
         }
       ]
     },
@@ -155,8 +184,9 @@
     "builtins": {
       "patterns": [
         {
+          "comment": "stack[Type](n) / heap[Type](n) / array[Type] — any identifier in brackets",
           "name": "meta.stack.ura",
-          "match": "(stack|heap|array)(\\[+(?:int|float|double|char|void|long|short|unsigned|signed|bool|chars|pointer|ref)\\]+)",
+          "match": "(stack|heap|array)(\\[[\\w]+\\])",
           "captures": {
             "1": { "name": "support.function.builtin.ura" },
             "2": { "name": "storage.type.ura" }
@@ -173,7 +203,7 @@
       "patterns": [
         {
           "name": "keyword.operator.ura",
-          "match": "==|!=|<=|>=|\\+|-|\\*|/|%|=|<|>|&&|\\|\\||!"
+          "match": "==|!=|<=|>=|<<|>>|\\+=|-=|\\*=|/=|%=|&&|\\|\\||[!~^]|[&|]|[+\\-*/<>%=]"
         }
       ]
     },
