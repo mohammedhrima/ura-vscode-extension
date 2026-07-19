@@ -3,25 +3,72 @@
   "name": "ura",
   "scopeName": "source.ura",
   "patterns": [
-    { "include": "#comments" },
-    { "include": "#imports" },
-    { "include": "#strings" },
-    { "include": "#characters" },
-    { "include": "#numbers" },
-    { "include": "#special_methods" },
-    { "include": "#keywords" },
-    { "include": "#declarations" },
-    { "include": "#library" },
-    { "include": "#types" },
-    { "include": "#struct_definitions" },
-    { "include": "#enum_definitions" },
-    { "include": "#custom_types" },
-    { "include": "#booleans" },
-    { "include": "#builtins" },
-    { "include": "#operators" },
-    { "include": "#functions" },
-    { "include": "#enum_values" },
-    { "include": "#variables" }
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#imports"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#characters"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#special_methods"
+    },
+    {
+      "include": "#parameters"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#declarations"
+    },
+    {
+      "include": "#library"
+    },
+    {
+      "include": "#types"
+    },
+    {
+      "include": "#booleans"
+    },
+    {
+      "include": "#builtins"
+    },
+    {
+      "include": "#namespaces"
+    },
+    {
+      "include": "#properties"
+    },
+    {
+      "include": "#enum_values"
+    },
+    {
+      "include": "#struct_definitions"
+    },
+    {
+      "include": "#enum_definitions"
+    },
+    {
+      "include": "#custom_types"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#functions"
+    },
+    {
+      "include": "#variables"
+    }
   ],
   "repository": {
     "comments": {
@@ -37,43 +84,50 @@
         }
       ]
     },
-
     "imports": {
       "patterns": [
         {
-          "comment": "use \"@/module\" or use \"./module\" — highlight path distinctly",
+          "comment": "use \"@/module\" or use \"./module\" \u2014 highlight path distinctly",
           "name": "meta.import.ura",
           "match": "\\b(use)\\s+(\"[^\"]+\")",
           "captures": {
-            "1": { "name": "keyword.library.ura" },
-            "2": { "name": "string.quoted.double.import.ura" }
+            "1": {
+              "name": "keyword.control.import.ura"
+            },
+            "2": {
+              "name": "string.quoted.double.import.ura"
+            }
           }
         },
         {
-          "comment": "link \"@/module\" or link \"./module\" — highlight path distinctly",
+          "comment": "link \"@/module\" or link \"./module\" \u2014 highlight path distinctly",
           "name": "meta.import.ura",
           "match": "\\b(link)\\s+(\"[^\"]+\")",
           "captures": {
-            "1": { "name": "keyword.library.ura" },
-            "2": { "name": "string.quoted.double.import.ura" }
+            "1": {
+              "name": "keyword.control.import.ura"
+            },
+            "2": {
+              "name": "string.quoted.double.import.ura"
+            }
           }
         }
       ]
     },
-
     "strings": {
       "name": "string.quoted.double.ura",
       "begin": "\"",
       "end": "\"",
       "patterns": [
-        { "include": "#printf-format-specifiers" },
+        {
+          "include": "#printf-format-specifiers"
+        },
         {
           "name": "constant.character.escape.ura",
           "match": "\\\\."
         }
       ]
     },
-
     "printf-format-specifiers": {
       "patterns": [
         {
@@ -82,7 +136,6 @@
         }
       ]
     },
-
     "characters": {
       "patterns": [
         {
@@ -98,7 +151,6 @@
         }
       ]
     },
-
     "numbers": {
       "patterns": [
         {
@@ -111,82 +163,134 @@
         }
       ]
     },
-
     "special_methods": {
       "patterns": [
         {
-          "comment": "pub fn — static method declaration",
+          "comment": "pub fn \u2014 static method declaration",
           "match": "\\b(pub)\\s+(fn)\\b",
           "captures": {
-            "1": { "name": "keyword.declaration.ura" },
-            "2": { "name": "keyword.declaration.ura" }
+            "1": {
+              "name": "storage.modifier.ura"
+            },
+            "2": {
+              "name": "keyword.declaration.ura"
+            }
           }
         },
         {
-          "comment": "operator delete / operator + etc. — operator overloading",
-          "match": "\\b(operator)\\s+(delete|[+\\-*/%=<>!&|^~]+)\\b",
+          "comment": "operator drop / operator + / operator += \u2014 overloading. No trailing \\b: a symbol operator is followed by '(', and \\b never matches between two non-word characters.",
+          "match": "\\b(operator)\\s+(drop|[+\\-*/%=<>!&|^~]+)",
           "captures": {
-            "1": { "name": "keyword.declaration.ura" },
-            "2": { "name": "keyword.other.special-method.ura" }
+            "1": {
+              "name": "keyword.declaration.ura"
+            },
+            "2": {
+              "name": "keyword.other.special-method.ura"
+            }
           }
         },
         {
-          "comment": "Type::method() — static dispatch",
+          "comment": "Type::method() \u2014 static dispatch",
           "match": "\\b([A-Z][a-zA-Z0-9_]*)(::)([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()",
           "captures": {
-            "1": { "name": "entity.name.type.ura" },
-            "2": { "name": "keyword.operator.ura" },
-            "3": { "name": "entity.name.function.ura" }
+            "1": {
+              "name": "entity.name.type.ura"
+            },
+            "2": {
+              "name": "keyword.operator.ura"
+            },
+            "3": {
+              "name": "entity.name.function.ura"
+            }
           }
         }
       ]
     },
-
     "keywords": {
       "patterns": [
         {
-          "name": "keyword.control.ura",
-          "match": "\\b(if|elif|else|while|for|return|break|continue|and|or|is|not|self|pub)\\b"
+          "comment": "branching",
+          "name": "keyword.control.conditional.ura",
+          "match": "\\b(if|elif|else|match|case|default)\\b"
+        },
+        {
+          "comment": "looping",
+          "name": "keyword.control.loop.ura",
+          "match": "\\b(while|loop|for|in|by|break|continue)\\b"
+        },
+        {
+          "name": "keyword.control.flow.return.ura",
+          "match": "\\breturn\\b"
+        },
+        {
+          "comment": "allocation and release, the new/clean pair",
+          "name": "keyword.operator.new.ura",
+          "match": "\\b(new|clean)\\b"
+        },
+        {
+          "comment": "word operators \u2014 same colour as && || ! ==",
+          "name": "keyword.operator.logical.ura",
+          "match": "\\b(and|or|not|is)\\b"
+        },
+        {
+          "comment": "the receiver, like 'this' elsewhere",
+          "name": "variable.language.self.ura",
+          "match": "\\bself\\b"
         }
       ]
     },
-
     "declarations": {
       "patterns": [
         {
+          "comment": "introduces a named thing",
           "name": "keyword.declaration.ura",
-          "match": "\\b(struct|fn|as|enum|operator|mod|pub)\\b"
+          "match": "\\b(fn|struct|enum|mod|operator)\\b"
+        },
+        {
+          "comment": "modifiers on a declaration or a binding",
+          "name": "storage.modifier.ura",
+          "match": "\\b(pub|proto|ref)\\b"
+        },
+        {
+          "name": "keyword.operator.cast.ura",
+          "match": "\\bas\\b"
         }
       ]
     },
-
     "library": {
       "patterns": [
         {
-          "name": "keyword.library.ura",
-          "match": "\\b(use|proto|link)\\b"
+          "name": "keyword.control.import.ura",
+          "match": "\\b(use|link)\\b"
         }
       ]
     },
-
     "types": {
       "patterns": [
         {
+          "comment": "exactly the is_dec keywords in src/frontend/lexer.c, plus array/List",
           "name": "storage.type.ura",
-          "match": "\\b(int|float|double|char|void|long|short|unsigned|signed|bool|chars|pointer|ref|array)\\b"
+          "match": "\\b(int|float|char|chars|bool|long|short|void|pointer|array|List)\\b"
         }
       ]
     },
-
     "struct_definitions": {
       "patterns": [
         {
-          "name": "entity.name.type.struct.ura",
-          "match": "(?<=\\bstruct\\s{1,64})([A-Z][a-zA-Z0-9_]*)(?=\\s*:)"
+          "comment": "struct Name \u2014 same scope as a type USE so the colour matches everywhere",
+          "match": "\\b(struct)\\s+([A-Z][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "keyword.declaration.ura"
+            },
+            "2": {
+              "name": "entity.name.type.ura"
+            }
+          }
         }
       ]
     },
-     "enum_definitions": {
+    "enum_definitions": {
       "patterns": [
         {
           "name": "entity.name.type.enum.ura",
@@ -194,27 +298,36 @@
         }
       ]
     },
-
     "custom_types": {
       "patterns": [
         {
-          "comment": "Return type after ) — fn foo() TypeName:",
+          "comment": "Return type after ) \u2014 fn foo() TypeName:",
           "match": "\\)\\s+([A-Z][a-zA-Z0-9_]*)\\b",
           "captures": {
-            "1": { "name": "entity.name.type.ura" }
+            "1": {
+              "name": "entity.name.type.ura"
+            }
           }
         },
         {
           "comment": "Variable declaration with custom type: 'varname TypeName'",
           "match": "\\b([a-z_][a-zA-Z0-9_]*)\\s+([A-Z][a-zA-Z0-9_]*)\\b",
           "captures": {
-            "1": { "name": "variable.other.ura" },
-            "2": { "name": "entity.name.type.ura" }
+            "1": {
+              "name": "variable.other.ura"
+            },
+            "2": {
+              "name": "entity.name.type.ura"
+            }
           }
+        },
+        {
+          "comment": "any remaining capitalised identifier is a type name \u2014 declaration, parameter, return, ::, field, anywhere",
+          "name": "entity.name.type.ura",
+          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
         }
       ]
     },
-
     "booleans": {
       "patterns": [
         {
@@ -223,25 +336,27 @@
         }
       ]
     },
-
     "builtins": {
       "patterns": [
         {
-          "comment": "stack[Type](n) / heap[Type](n) / array[Type] — any identifier in brackets",
-          "name": "meta.stack.ura",
-          "match": "(stack|heap|array)(\\[[\\w]+\\])",
+          "comment": "array[Type] \u2014 any identifier in brackets",
+          "name": "meta.array.ura",
+          "match": "(array)(\\[[\\w]+\\])",
           "captures": {
-            "1": { "name": "support.function.builtin.ura" },
-            "2": { "name": "storage.type.ura" }
+            "1": {
+              "name": "support.function.builtin.ura"
+            },
+            "2": {
+              "name": "storage.type.ura"
+            }
           }
         },
         {
           "name": "support.function.builtin.ura",
-          "match": "\\b(stack|heap|output|typeof|sizeof)\\b"
+          "match": "\\b(output|typeof|sizeof)\\b"
         }
       ]
     },
-
     "operators": {
       "patterns": [
         {
@@ -250,7 +365,6 @@
         }
       ]
     },
-
     "functions": {
       "patterns": [
         {
@@ -259,17 +373,56 @@
         }
       ]
     },
-
+    "namespaces": {
+      "patterns": [
+        {
+          "name": "entity.name.namespace.ura",
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=::)"
+        }
+      ]
+    },
+    "parameters": {
+      "begin": "\\b(fn)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(\\()",
+      "beginCaptures": {
+        "1": { "name": "keyword.declaration.ura" },
+        "2": { "name": "entity.name.function.ura" },
+        "3": { "name": "punctuation.parameters.begin.ura" }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": { "name": "punctuation.parameters.end.ura" }
+      },
+      "patterns": [
+        { "include": "#comments" },
+        {
+          "name": "storage.modifier.ura",
+          "match": "\\b(ref)\\b"
+        },
+        {
+          "name": "variable.parameter.ura",
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=\\s+[A-Za-z_])"
+        },
+        { "include": "#types" },
+        { "include": "#custom_types" }
+      ]
+    },
+    "properties": {
+      "patterns": [
+        {
+          "name": "variable.other.property.ura",
+          "match": "(?<=\\.)\\s*([a-zA-Z_][a-zA-Z0-9_]*)\\b(?!\\s*\\()"
+        }
+      ]
+    },
     "enum_values": {
       "patterns": [
         {
-          "comment": "ALL_CAPS identifiers are enum constants — unique color distinct from type names",
+          "comment": "ALL_CAPS identifiers are enum constants \u2014 unique color distinct from type names",
           "name": "constant.other.enum-member.ura",
           "match": "\\b([A-Z][A-Z0-9_]+)\\b"
         }
       ]
     },
-
     "variables": {
       "patterns": [
         {

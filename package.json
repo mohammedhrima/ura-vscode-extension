@@ -1,7 +1,7 @@
 {
   "name": "ura-lang",
   "displayName": "Ura Language Support",
-  "description": "Syntax highlighting and smart indentation for Ura programming language (.ura files)",
+  "description": "Syntax highlighting and smart indentation for the Ura programming language (.ura) and anvil build scripts (.an)",
   "version": "0.0.1",
   "publisher": "mohamedhrima",
   "author": {
@@ -19,16 +19,17 @@
   ],
   "keywords": [
     "ura",
+    "anvil",
     "programming language",
     "syntax highlighting",
     "language support"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/mohamedhrima/ura-vscode-extension"
+    "url": "https://github.com/mohammedhrima/ura-vscode-extension"
   },
   "bugs": {
-    "url": "https://github.com/mohamedhrima/ura-vscode-extension/issues"
+    "url": "https://github.com/mohammedhrima/ura-vscode-extension/issues"
   },
   "devDependencies": {
     "@types/vscode": "^1.103.0",
@@ -48,6 +49,17 @@
           ".ura"
         ],
         "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "anvil",
+        "aliases": [
+          "Anvil",
+          "anvil"
+        ],
+        "extensions": [
+          ".an"
+        ],
+        "configuration": "./anvil-language-configuration.json"
       }
     ],
     "grammars": [
@@ -55,6 +67,11 @@
         "language": "ura",
         "scopeName": "source.ura",
         "path": "./syntaxes/ura.tmLanguage.json"
+      },
+      {
+        "language": "anvil",
+        "scopeName": "source.anvil",
+        "path": "./syntaxes/anvil.tmLanguage.json"
       }
     ],
     "iconThemes": [
@@ -66,6 +83,15 @@
     ],
     "configurationDefaults": {
       "[ura]": {
+        "editor.autoIndent": "advanced",
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+        "editor.indentSize": 4,
+        "editor.detectIndentation": false,
+        "editor.trimAutoWhitespace": true,
+        "editor.useTabStops": true
+      },
+      "[anvil]": {
         "editor.autoIndent": "advanced",
         "editor.insertSpaces": true,
         "editor.tabSize": 4,

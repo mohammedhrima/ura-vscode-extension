@@ -2,6 +2,11 @@
 
 Syntax highlighting and smart indentation support for the [Ura programming language](https://github.com/mohammedhrima/ura-lang) in Visual Studio Code.
 
+> **This extension is fully vibe-coded.** Every line of it — the TextMate grammar,
+> the language configuration, the build script and this README — was written by an
+> AI assistant rather than by hand. The compiler it highlights is not; that one is
+> written the old-fashioned way.
+
 ## Features
 
 - **Syntax Highlighting** - Full syntax highlighting for `.ura` files
@@ -109,18 +114,36 @@ main():
 
 ### Data Types
 - `int`, `long`, `short` - Integer types
-- `float`, `double` - Floating point types
+- `float` - Floating point (`double` is planned, not implemented)
 - `char`, `chars` - Character and string types
 - `bool` - Boolean type (`True`, `False`)
 - `void` - No return value
-- `pointer` - Generic pointer type
-- `ref` - Reference type modifier
+- `pointer` - Generic pointer type (currently an alias for `chars`)
+- `array`, `List` - Aggregate types
 
 ### Keywords
-- **Control Flow**: `if`, `elif`, `else`, `while`, `for`, `return`, `break`, `continue`
-- **Logical**: `and`, `or`, `not`, `is`
-- **Declarations**: `fn`, `struct`, `as`
-- **Library**: `use`, `proto`, `typeof`
+
+Each group below is a distinct colour in the grammar, so unrelated words never
+share one.
+
+| Group | Words | Scope |
+|---|---|---|
+| Conditional | `if` `elif` `else` `match` `case` `default` | `keyword.control.conditional` |
+| Loop | `while` `loop` `for` `in` `by` `break` `continue` | `keyword.control.loop` |
+| Return | `return` | `keyword.control.flow.return` |
+| Allocation | `new` `clean` | `keyword.operator.new` |
+| Word operators | `and` `or` `not` `is` | `keyword.operator.logical` |
+| Cast | `as` | `keyword.operator.cast` |
+| Receiver | `self` | `variable.language.self` |
+| Declaration | `fn` `struct` `enum` `mod` `operator` | `keyword.declaration` |
+| Modifier | `pub` `proto` `ref` | `storage.modifier` |
+| Import | `use` `link` | `keyword.control.import` |
+| Types | `int` `float` `char` `chars` `bool` `long` `short` `void` `pointer` `array` `List` | `storage.type` |
+| Builtins | `output` `typeof` `sizeof` | `support.function.builtin` |
+| Literals | `True` `False` `null` | `constant.language` |
+
+`operator drop`, `operator +`, `operator +=` and friends get
+`keyword.other.special-method` on the operator itself.
 
 ### Operators
 - **Arithmetic**: `+`, `-`, `*`, `/`, `%`
@@ -129,8 +152,8 @@ main():
 - **Assignment**: `=`, `+=`, `-=`, `*=`, `/=`, `%=`
 
 ### Built-in Functions
-- `stack()` - Stack allocation
-- `output()` - Output function
+- `output()` - prints any value, including a whole struct
+- `typeof()`, `sizeof()` - compile-time type queries
 
 ### Comments
 ```ura
@@ -167,7 +190,7 @@ The extension provides highlighting for:
 - Numeric literals (integers and floats)
 - Comments (line and block)
 - Operators
-- Boolean constants (`True`, `False`, `NULL`)
+- Language constants (`True`, `False`, `null`)
 - Built-in functions
 
 ## Development

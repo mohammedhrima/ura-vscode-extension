@@ -323,7 +323,7 @@ const KEYWORDS = [
   "use", "proto", "True", "False", "NULL",
   "int", "float", "double", "char", "void", "long", "short",
   "unsigned", "signed", "bool", "chars", "pointer", "ref", "array",
-  "stack", "heap", "output", "sizeof", "typeof",
+  "output", "sizeof", "typeof",
 ];
 
 const completionProvider: vscode.CompletionItemProvider = {
@@ -517,7 +517,7 @@ const hoverProvider: vscode.HoverProvider = {
 // Names to never lint (builtins, control flow, etc.)
 const SKIP_LINT = new Set([
   "if", "elif", "else", "while", "for", "return",
-  "output", "typeof", "sizeof", "stack", "heap", "main",
+  "output", "typeof", "sizeof", "main",
 ]);
 
 function countActualArgs(text: string, openParenOffset: number): number {
