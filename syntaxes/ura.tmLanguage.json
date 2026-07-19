@@ -270,7 +270,7 @@
         {
           "comment": "exactly the is_dec keywords in src/frontend/lexer.c, plus array/List",
           "name": "storage.type.ura",
-          "match": "\\b(int|float|char|chars|bool|long|short|void|pointer|array|List)\\b"
+          "match": "\\b(i8|i16|i32|i64|u8|u16|u32|u64|f32|f64|bool|char|void|pointer|array|List)\\b"
         }
       ]
     },
@@ -361,7 +361,7 @@
       "patterns": [
         {
           "name": "keyword.operator.ura",
-          "match": "::|==|!=|<=|>=|<<|>>|\\+=|-=|\\*=|/=|%=|&&|\\|\\||[!~^]|[&|]|[+\\-*/<>%=]"
+          "match": "::|<<=|>>=|==|!=|<=|>=|<<|>>|\\+=|-=|\\*=|/=|%=|&=|\\|=|\\^=|&&|\\|\\||[!~^]|[&|]|[+\\-*/<>%=]"
         }
       ]
     },

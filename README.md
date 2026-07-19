@@ -20,9 +20,9 @@ Syntax highlighting and smart indentation support for the [Ura programming langu
 ### Local Installation (Current)
 
 1. Clone or download this repository
-2. Run the build script:
+2. Build and install:
    ```bash
-   ./build.sh
+   make install
    ```
 3. Restart VSCode completely (Cmd+Q on macOS, then reopen)
 4. Open any `.ura` file
@@ -42,26 +42,26 @@ Ura is a statically-typed, compiled programming language that compiles to LLVM I
 #### Variables and Types
 ```ura
 main():
-    a int = 10
-    name chars = "Hello"
+    a i32 = 10
+    name char[] = "Hello"
     flag bool = True
     c char = 'x'
 ```
 
 #### Functions
 ```ura
-fn add(a int, b int) int:
+fn add(a i32, b i32) i32:
     return a + b
 
 main():
-    result int = add(5, 3)
+    result i32 = add(5, 3)
     return result
 ```
 
 #### Control Flow
 ```ura
 main():
-    a int = 5
+    a i32 = 5
     if a < 10:
         return 1
     elif a < 20:
@@ -73,17 +73,31 @@ main():
 #### While Loops
 ```ura
 main():
-    i int = 0
+    i i32 = 0
     while i < 10:
         i += 1
     return i
 ```
 
+#### For Loops
+```ura
+main():
+    for i in 0..10 by 3:     // range, stepping by 3
+        output(i)
+
+    nums i32[] = [1, 2, 3]
+    for x in nums:           // each element, by value
+        output(x)
+
+    for ref x in nums:       // aliases each element, writes stick
+        x += 1
+```
+
 #### Structs
 ```ura
 struct User:
-    name chars
-    age int
+    name char[]
+    age i32
     active bool
 
 main():
@@ -94,16 +108,16 @@ main():
 #### References
 ```ura
 main():
-    a int = 10
-    b ref int = a    // b is a reference to a
+    a i32 = 10
+    b ref i32 = a    // b is a reference to a
     b = 20           // modifies a through the reference
     return a         // returns 20
 ```
 
 #### C Interop
 ```ura
-proto fn puts(str chars) int
-proto fn malloc(size int) pointer
+proto fn puts(str char[]) i32
+proto fn malloc(size i32) pointer
 
 main():
     puts("Hello, World!")
@@ -113,13 +127,17 @@ main():
 ## Supported Language Features
 
 ### Data Types
-- `int`, `long`, `short` - Integer types
-- `float` - Floating point (`double` is planned, not implemented)
-- `char`, `chars` - Character and string types
+- `i8`, `i16`, `i32`, `i64` - Signed integers
+- `u8`, `u16`, `u32`, `u64` - Unsigned integers
+- `f32`, `f64` - Floating point
+- `char` - A byte that prints as a character and holds `'x'` literals
+- `char[]` - The string type; `chars` no longer exists
 - `bool` - Boolean type (`True`, `False`)
 - `void` - No return value
-- `pointer` - Generic pointer type (currently an alias for `chars`)
+- `pointer` - Generic pointer type
 - `array`, `List` - Aggregate types
+
+A trailing `?` marks a type nullable, as in `char[]?`.
 
 ### Keywords
 
@@ -138,7 +156,7 @@ share one.
 | Declaration | `fn` `struct` `enum` `mod` `operator` | `keyword.declaration` |
 | Modifier | `pub` `proto` `ref` | `storage.modifier` |
 | Import | `use` `link` | `keyword.control.import` |
-| Types | `int` `float` `char` `chars` `bool` `long` `short` `void` `pointer` `array` `List` | `storage.type` |
+| Types | `i8` `i16` `i32` `i64` `u8` `u16` `u32` `u64` `f32` `f64` `bool` `char` `void` `pointer` `array` `List` | `storage.type` |
 | Builtins | `output` `typeof` `sizeof` | `support.function.builtin` |
 | Literals | `True` `False` `null` | `constant.language` |
 
@@ -148,8 +166,10 @@ share one.
 ### Operators
 - **Arithmetic**: `+`, `-`, `*`, `/`, `%`
 - **Comparison**: `==`, `!=`, `<`, `>`, `<=`, `>=`
-- **Logical**: `&&`, `||`, `!`
+- **Logical**: `&&`, `||`, `!` (and the words `and`, `or`, `not`, `is`)
+- **Bitwise**: `&`, `|`, `^`, `~`, `<<`, `>>`
 - **Assignment**: `=`, `+=`, `-=`, `*=`, `/=`, `%=`
+- **Compound bitwise**: `&=`, `|=`, `^=`, `<<=`, `>>=`
 
 ### Built-in Functions
 - `output()` - prints any value, including a whole struct
@@ -199,12 +219,15 @@ The extension provides highlighting for:
 
 Prerequisites:
 - Node.js and npm
-- `@vscode/vsce` package (installed automatically by build script)
+- `@vscode/vsce` package (installed automatically via npm)
 
 Build and install:
 ```bash
-./build.sh
+make install
 ```
+
+Other targets: `make build` (compile only), `make package` (create the
+`.vsix`), `make clean`.
 
 ### Project Structure
 ```
@@ -217,7 +240,7 @@ Build and install:
 │   ├── icon.png                # Extension icon
 │   ├── icon.svg                # Extension icon (SVG)
 │   └── file.json               # File icon theme
-├── build.sh                    # Build and install script
+├── Makefile                    # Build and install targets
 └── README.md                   # This file
 ```
 

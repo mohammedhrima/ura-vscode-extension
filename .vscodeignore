@@ -2,5 +2,5 @@ node_modules/**
 src/**
 .vscode/**
 tsconfig.json
-build.sh
+Makefile
 *.vsix
