@@ -209,6 +209,11 @@
     "keywords": {
       "patterns": [
         {
+          "comment": "platform directives — @if / @elif / @else conditional compilation",
+          "name": "keyword.control.directive.ura",
+          "match": "@(if|elif|else)\\b"
+        },
+        {
           "comment": "branching",
           "name": "keyword.control.conditional.ura",
           "match": "\\b(if|elif|else|match|case|default)\\b"
