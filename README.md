@@ -148,7 +148,8 @@ share one.
 |---|---|---|
 | Conditional | `if` `elif` `else` `match` `case` `default` | `keyword.control.conditional` |
 | Loop | `while` `loop` `for` `in` `by` `break` `continue` | `keyword.control.loop` |
-| Return | `return` | `keyword.control.flow.return` |
+| Return | `return` `ret` | `keyword.control.flow.return` |
+| Exception | `try` `catch` `throw` | `keyword.control.exception` |
 | Allocation | `new` `clean` | `keyword.operator.new` |
 | Word operators | `and` `or` `not` `is` | `keyword.operator.logical` |
 | Cast | `as` | `keyword.operator.cast` |
@@ -157,7 +158,8 @@ share one.
 | Modifier | `pub` `proto` `ref` | `storage.modifier` |
 | Import | `use` `link` | `keyword.control.import` |
 | Types | `i8` `i16` `i32` `i64` `u8` `u16` `u32` `u64` `f32` `f64` `bool` `char` `void` `pointer` `array` `List` | `storage.type` |
-| Builtins | `output` `typeof` `sizeof` | `support.function.builtin` |
+| Builtins | `output` `errput` `typeof` `sizeof` | `support.function.builtin` |
+| Directive | `@if` `@elif` `@else` `@no-warn` | `keyword.control.directive` |
 | Literals | `True` `False` `null` | `constant.language` |
 
 `operator drop`, `operator +`, `operator +=` and friends get
@@ -173,6 +175,7 @@ share one.
 
 ### Built-in Functions
 - `output()` - prints any value, including a whole struct
+- `errput()` - the same, in red on stderr
 - `typeof()`, `sizeof()` - compile-time type queries
 
 ### Comments
