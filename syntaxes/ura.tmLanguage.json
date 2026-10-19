@@ -2,13 +2,8 @@
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "name": "ura",
   "scopeName": "source.ura",
+  "comment": "Keep these word lists in sync with the tokenizer in src/main.c (keywords and specials tables).",
   "patterns": [
-    {
-      "include": "#comments"
-    },
-    {
-      "include": "#imports"
-    },
     {
       "include": "#strings"
     },
@@ -16,61 +11,81 @@
       "include": "#characters"
     },
     {
-      "include": "#numbers"
+      "include": "#comments"
     },
     {
-      "include": "#special_methods"
+      "include": "#function-definition"
     },
     {
-      "include": "#parameters"
+      "include": "#import"
     },
     {
-      "include": "#keywords"
-    },
-    {
-      "include": "#declarations"
-    },
-    {
-      "include": "#library"
+      "include": "#control"
     },
     {
       "include": "#types"
     },
     {
+      "include": "#pointers"
+    },
+    {
       "include": "#booleans"
     },
     {
-      "include": "#builtins"
+      "include": "#numbers"
     },
     {
-      "include": "#namespaces"
-    },
-    {
-      "include": "#properties"
-    },
-    {
-      "include": "#enum_values"
-    },
-    {
-      "include": "#struct_definitions"
-    },
-    {
-      "include": "#enum_definitions"
-    },
-    {
-      "include": "#custom_types"
+      "include": "#function-call"
     },
     {
       "include": "#operators"
     },
     {
-      "include": "#functions"
+      "include": "#punctuation"
     },
     {
       "include": "#variables"
     }
   ],
   "repository": {
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.ura",
+          "begin": "\"",
+          "end": "\"|$",
+          "patterns": [
+            {
+              "name": "constant.character.escape.ura",
+              "match": "\\\\[ntrbfva0?\\\\\"']"
+            },
+            {
+              "name": "invalid.illegal.unknown-escape.ura",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "characters": {
+      "patterns": [
+        {
+          "name": "string.quoted.single.ura",
+          "begin": "'",
+          "end": "'|$",
+          "patterns": [
+            {
+              "name": "constant.character.escape.ura",
+              "match": "\\\\[ntrbfva0?\\\\\"']"
+            },
+            {
+              "name": "invalid.illegal.unknown-escape.ura",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
     "comments": {
       "patterns": [
         {
@@ -84,257 +99,61 @@
         }
       ]
     },
-    "imports": {
+    "function-definition": {
       "patterns": [
         {
-          "comment": "use \"@/module\" or use \"./module\" \u2014 highlight path distinctly",
-          "name": "meta.import.ura",
-          "match": "\\b(use)\\s+(\"[^\"]+\")",
+          "match": "\\b(fn|proto)\\s+([A-Za-z_]\\w*)",
           "captures": {
             "1": {
-              "name": "keyword.control.import.ura"
+              "name": "keyword.declaration.function.ura"
             },
             "2": {
-              "name": "string.quoted.double.import.ura"
-            }
-          }
-        },
-        {
-          "comment": "link \"@/module\" or link \"./module\" \u2014 highlight path distinctly",
-          "name": "meta.import.ura",
-          "match": "\\b(link)\\s+(\"[^\"]+\")",
-          "captures": {
-            "1": {
-              "name": "keyword.control.import.ura"
-            },
-            "2": {
-              "name": "string.quoted.double.import.ura"
-            }
-          }
-        }
-      ]
-    },
-    "strings": {
-      "name": "string.quoted.double.ura",
-      "begin": "\"",
-      "end": "\"",
-      "patterns": [
-        {
-          "include": "#printf-format-specifiers"
-        },
-        {
-          "name": "constant.character.escape.ura",
-          "match": "\\\\."
-        }
-      ]
-    },
-    "printf-format-specifiers": {
-      "patterns": [
-        {
-          "name": "constant.character.format.placeholder.ura",
-          "match": "%([-+0 #])?([0-9]+|\\*)?(\\.([0-9]+|\\*))?([hlLzjt]|hh|ll)?[diuoxXfFeEgGaAcspn%]"
-        }
-      ]
-    },
-    "characters": {
-      "patterns": [
-        {
-          "name": "string.quoted.single.ura",
-          "begin": "'",
-          "end": "'",
-          "patterns": [
-            {
-              "name": "constant.character.escape.ura",
-              "match": "\\\\."
-            }
-          ]
-        }
-      ]
-    },
-    "numbers": {
-      "patterns": [
-        {
-          "name": "constant.numeric.float.ura",
-          "match": "\\b\\d+\\.\\d+([eE][+-]?\\d+)?\\b"
-        },
-        {
-          "name": "constant.numeric.integer.ura",
-          "match": "\\b\\d+\\b"
-        }
-      ]
-    },
-    "special_methods": {
-      "patterns": [
-        {
-          "comment": "pub fn \u2014 static method declaration",
-          "match": "\\b(pub)\\s+(fn)\\b",
-          "captures": {
-            "1": {
-              "name": "storage.modifier.ura"
-            },
-            "2": {
-              "name": "keyword.declaration.ura"
-            }
-          }
-        },
-        {
-          "comment": "operator drop / operator + / operator += \u2014 overloading. No trailing \\b: a symbol operator is followed by '(', and \\b never matches between two non-word characters.",
-          "match": "\\b(operator)\\s+(drop|[+\\-*/%=<>!&|^~]+)",
-          "captures": {
-            "1": {
-              "name": "keyword.declaration.ura"
-            },
-            "2": {
-              "name": "keyword.other.special-method.ura"
-            }
-          }
-        },
-        {
-          "comment": "Type::method() and mod::fn() \u2014 static dispatch (qualifier may be lowercase for modules)",
-          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)(::)([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()",
-          "captures": {
-            "1": {
-              "name": "entity.name.type.ura"
-            },
-            "2": {
-              "name": "keyword.operator.ura"
-            },
-            "3": {
               "name": "entity.name.function.ura"
             }
           }
+        },
+        {
+          "match": "\\b(struct)\\s+([A-Za-z_]\\w*)",
+          "captures": {
+            "1": {
+              "name": "keyword.declaration.struct.ura"
+            },
+            "2": {
+              "name": "entity.name.type.struct.ura"
+            }
+          }
         }
       ]
     },
-    "keywords": {
-      "patterns": [
-        {
-          "comment": "platform directives — @if / @elif / @else conditional compilation",
-          "name": "keyword.control.directive.ura",
-          "match": "@(if|elif|else|no-warn)\\b"
-        },
-        {
-          "comment": "branching",
-          "name": "keyword.control.conditional.ura",
-          "match": "\\b(if|elif|else|match|case|default)\\b"
-        },
-        {
-          "comment": "looping",
-          "name": "keyword.control.loop.ura",
-          "match": "\\b(while|loop|for|in|by|break|continue)\\b"
-        },
-        {
-          "name": "keyword.control.flow.return.ura",
-          "match": "\\b(return|ret)\\b"
-        },
-        {
-          "comment": "exceptions: throw an Error, catch it",
-          "name": "keyword.control.exception.ura",
-          "match": "\\b(try|catch|throw)\\b"
-        },
-        {
-          "comment": "allocation and release, the new/clean pair",
-          "name": "keyword.operator.new.ura",
-          "match": "\\b(new|clean)\\b"
-        },
-        {
-          "comment": "word operators \u2014 same colour as && || ! ==",
-          "name": "keyword.operator.logical.ura",
-          "match": "\\b(and|or|not|is)\\b"
-        },
-        {
-          "comment": "the receiver, like 'this' elsewhere",
-          "name": "variable.language.self.ura",
-          "match": "\\bself\\b"
-        }
-      ]
-    },
-    "declarations": {
-      "patterns": [
-        {
-          "comment": "introduces a named thing",
-          "name": "keyword.declaration.ura",
-          "match": "\\b(fn|struct|enum|mod|operator)\\b"
-        },
-        {
-          "comment": "modifiers on a declaration or a binding",
-          "name": "storage.modifier.ura",
-          "match": "\\b(pub|proto|ref)\\b"
-        },
-        {
-          "name": "keyword.operator.cast.ura",
-          "match": "\\bas\\b"
-        }
-      ]
-    },
-    "library": {
+    "import": {
       "patterns": [
         {
           "name": "keyword.control.import.ura",
-          "match": "\\b(use|link)\\b"
+          "match": "\\buse\\b"
+        }
+      ]
+    },
+    "control": {
+      "patterns": [
+        {
+          "name": "keyword.control.ura",
+          "match": "\\b(if|elif|else|while|break|continue|return|and|or|as)\\b"
         }
       ]
     },
     "types": {
       "patterns": [
         {
-          "comment": "exactly the is_dec keywords in src/frontend/lexer.c, plus array/List",
           "name": "storage.type.ura",
-          "match": "\\b(i8|i16|i32|i64|u8|u16|u32|u64|f32|f64|bool|char|void|pointer|array|List)\\b"
+          "match": "\\b(bool|char|i8|i32|chars)\\b"
         }
       ]
     },
-    "struct_definitions": {
+    "pointers": {
       "patterns": [
         {
-          "comment": "struct Name \u2014 same scope as a type USE so the colour matches everywhere",
-          "match": "\\b(struct)\\s+([A-Z][a-zA-Z0-9_]*)",
-          "captures": {
-            "1": {
-              "name": "keyword.declaration.ura"
-            },
-            "2": {
-              "name": "entity.name.type.ura"
-            }
-          }
-        }
-      ]
-    },
-    "enum_definitions": {
-      "patterns": [
-        {
-          "name": "entity.name.type.enum.ura",
-          "match": "(?<=\\benum\\s{1,64})([A-Z][a-zA-Z0-9_]*)(?=\\s*:)"
-        }
-      ]
-    },
-    "custom_types": {
-      "patterns": [
-        {
-          "comment": "Return type after ) \u2014 fn foo() TypeName:",
-          "match": "\\)\\s+([A-Z][a-zA-Z0-9_]*)\\b",
-          "captures": {
-            "1": {
-              "name": "entity.name.type.ura"
-            }
-          }
-        },
-        {
-          "comment": "Variable declaration with custom type: 'varname TypeName'",
-          "match": "\\b([a-z_][a-zA-Z0-9_]*)\\s+([A-Z][a-zA-Z0-9_]*)\\b",
-          "captures": {
-            "1": {
-              "name": "variable.other.ura"
-            },
-            "2": {
-              "name": "entity.name.type.ura"
-            }
-          }
-        },
-        {
-          "comment": "any remaining capitalised identifier is a type name \u2014 declaration, parameter, return, ::, field, anywhere",
-          "name": "entity.name.type.ura",
-          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+          "name": "keyword.operator.pointer.ura",
+          "match": "(?<!&)&(?!&)"
         }
       ]
     },
@@ -342,94 +161,63 @@
       "patterns": [
         {
           "name": "constant.language.boolean.ura",
-          "match": "\\b(True|False|null)\\b"
+          "match": "\\b(True|False)\\b"
         }
       ]
     },
-    "builtins": {
+    "numbers": {
       "patterns": [
         {
-          "comment": "array[Type] \u2014 any identifier in brackets",
-          "name": "meta.array.ura",
-          "match": "(array)(\\[[\\w]+\\])",
+          "name": "constant.numeric.integer.ura",
+          "match": "\\b\\d+\\b"
+        }
+      ]
+    },
+    "function-call": {
+      "patterns": [
+        {
+          "match": "\\b([A-Za-z_]\\w*)\\s*(?=\\()",
           "captures": {
             "1": {
-              "name": "support.function.builtin.ura"
-            },
-            "2": {
-              "name": "storage.type.ura"
+              "name": "entity.name.function.call.ura"
             }
           }
-        },
-        {
-          "name": "support.function.builtin.ura",
-          "match": "\\b(output|errput|typeof|sizeof)\\b"
         }
       ]
     },
     "operators": {
       "patterns": [
         {
-          "name": "keyword.operator.ura",
-          "match": "::|<<=|>>=|==|!=|<=|>=|<<|>>|\\+=|-=|\\*=|/=|%=|&=|\\|=|\\^=|&&|\\|\\||[!~^]|[&|]|[+\\-*/<>%=]"
-        }
-      ]
-    },
-    "functions": {
-      "patterns": [
-        {
-          "name": "entity.name.function.ura",
-          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()"
-        }
-      ]
-    },
-    "namespaces": {
-      "patterns": [
-        {
-          "name": "entity.name.namespace.ura",
-          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=::)"
-        }
-      ]
-    },
-    "parameters": {
-      "begin": "\\b(fn)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(\\()",
-      "beginCaptures": {
-        "1": { "name": "keyword.declaration.ura" },
-        "2": { "name": "entity.name.function.ura" },
-        "3": { "name": "punctuation.parameters.begin.ura" }
-      },
-      "end": "\\)",
-      "endCaptures": {
-        "0": { "name": "punctuation.parameters.end.ura" }
-      },
-      "patterns": [
-        { "include": "#comments" },
-        {
-          "name": "storage.modifier.ura",
-          "match": "\\b(ref)\\b"
+          "name": "keyword.operator.assignment.ura",
+          "match": "\\+=|-=|\\*=|/=|%="
         },
         {
-          "name": "variable.parameter.ura",
-          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=\\s+[A-Za-z_])"
+          "name": "keyword.operator.comparison.ura",
+          "match": "==|!=|<=|>=|<|>"
         },
-        { "include": "#types" },
-        { "include": "#custom_types" }
-      ]
-    },
-    "properties": {
-      "patterns": [
         {
-          "name": "variable.other.property.ura",
-          "match": "(?<=\\.)\\s*([a-zA-Z_][a-zA-Z0-9_]*)\\b(?!\\s*\\()"
+          "name": "keyword.operator.logical.ura",
+          "match": "&&|\\|\\|"
+        },
+        {
+          "name": "keyword.operator.arithmetic.ura",
+          "match": "[+\\-*/%]"
+        },
+        {
+          "name": "keyword.operator.assignment.ura",
+          "match": "="
         }
       ]
     },
-    "enum_values": {
+    "punctuation": {
       "patterns": [
         {
-          "comment": "ALL_CAPS identifiers are enum constants \u2014 unique color distinct from type names",
-          "name": "constant.other.enum-member.ura",
-          "match": "\\b([A-Z][A-Z0-9_]+)\\b"
+          "name": "punctuation.section.block.begin.ura",
+          "match": ":"
+        },
+        {
+          "name": "punctuation.separator.comma.ura",
+          "match": ","
         }
       ]
     },
@@ -437,7 +225,7 @@
       "patterns": [
         {
           "name": "variable.other.ura",
-          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?!\\s*\\()"
+          "match": "\\b[A-Za-z_]\\w*\\b"
         }
       ]
     }
