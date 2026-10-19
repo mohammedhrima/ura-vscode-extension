@@ -1,302 +1,125 @@
 # Ura Language Support for Visual Studio Code
 
-Syntax highlighting and smart indentation support for the [Ura programming language](https://github.com/mohammedhrima/ura-lang) in Visual Studio Code.
+Editor support for the [Ura programming language](https://github.com/mohammedhrima/ura-lang).
+The extension grows together with the compiler: it only knows what the compiler
+in `../src` accepts today.
 
 > **This extension is fully vibe-coded.** Every line of it — the TextMate grammar,
-> the language configuration, the build script and this README — was written by an
-> AI assistant rather than by hand. The compiler it highlights is not; that one is
-> written the old-fashioned way.
+> the language configuration, the TypeScript, the build script and this README —
+> was written by an AI assistant rather than by hand. The compiler it supports is
+> not; that one is written the old-fashioned way.
 
 ## Features
 
-- **Syntax Highlighting** - Full syntax highlighting for `.ura` files
-- **Smart Indentation** - Automatic indentation based on language structure
-- **Auto-Closing Pairs** - Automatic closing of brackets, quotes, and parentheses
-- **Comment Support** - Line (`//`) and block (`/* */`) comment toggling
-- **Custom File Icons** - Distinctive icons for `.ura` files
+- **Highlighting**: keywords, types, functions, `struct` names (also where they
+  are used, through semantic tokens), strings, numbers, `//` and `/* */` comments.
+- **Formatter** (Format Document, Format Selection, and on save by default):
+  4-space indentation that keeps the compiler's levels, one space around
+  operators, after commas and in declarations, tight calls/indexes/`&`/`.`,
+  one blank line between top-level `fn` / `struct` / `proto` / `use` groups.
+  Strings and comments are never touched. It never changes what a program means
+  (tested: the compiler's IR is identical before and after formatting).
+- **Completion**: keywords, types, struct names, functions (with parameter
+  placeholders) of the file and of the files it `use`s, visible variables, and
+  after `x.` the attributes and methods of `x`'s struct.
+- **Hover**: signatures of functions and methods, structs with their attributes,
+  types of variables, parameters and attributes.
+- **Signature help** while typing a call, methods included (`self` is implicit).
+- **Go to definition**, **Find all references**, **highlights** and **rename**
+  for variables, parameters, functions, structs, attributes and methods, across
+  the files of the workspace. Rename refuses keywords, invalid names, `self` and
+  names already taken.
+- **Outline / breadcrumbs** and **Go to Symbol in Workspace** (Ctrl+T).
+- **`use "path"`**: ctrl+click opens the file; its functions and structs are
+  known everywhere (transitively, like the compiler's lookup).
+- **Diagnostics from the real compiler**, on open and on save; files reached
+  through `use` are compiled too. Errors show on the first line until the
+  compiler reports positions.
+- **Run / Build** (play button in the editor title, or `Ura: Run File`): compiles
+  to `build/<name>` next to the file and runs it in the "Ura" terminal.
+- **Snippets**: `fn`, `main`, `struct`, `method`, `if`, `ife`, `while`, `use`, `printf`.
+- **Editing**: auto-closing brackets and quotes, indentation on `:`,
+  indentation-based folding, file icon.
 
-## Installation
+## Settings
 
-### Local Installation (Current)
-
-1. Clone or download this repository
-2. Build and install:
-   ```bash
-   make install
-   ```
-3. Restart VSCode completely (Cmd+Q on macOS, then reopen)
-4. Open any `.ura` file
-
-The extension will be installed to `~/.vscode/extensions/mohamedhrima.ura-lang-0.0.1/`
-
-### Marketplace Installation (Coming Soon)
-
-The extension will be available on the Visual Studio Code Marketplace.
-
-## Language Overview
-
-Ura is a statically-typed, compiled programming language that compiles to LLVM IR. It features Python-like indentation syntax with C-style semantics.
-
-### Syntax Examples
-
-#### Variables and Types
-```ura
-main():
-    a i32 = 10
-    name char[] = "Hello"
-    flag bool = True
-    c char = 'x'
-```
-
-#### Functions
-```ura
-fn add(a i32, b i32) i32:
-    return a + b
-
-main():
-    result i32 = add(5, 3)
-    return result
-```
-
-#### Control Flow
-```ura
-main():
-    a i32 = 5
-    if a < 10:
-        return 1
-    elif a < 20:
-        return 2
-    else:
-        return 3
-```
-
-#### While Loops
-```ura
-main():
-    i i32 = 0
-    while i < 10:
-        i += 1
-    return i
-```
-
-#### For Loops
-```ura
-main():
-    for i in 0..10 by 3:     // range, stepping by 3
-        output(i)
-
-    nums i32[] = [1, 2, 3]
-    for x in nums:           // each element, by value
-        output(x)
-
-    for ref x in nums:       // aliases each element, writes stick
-        x += 1
-```
-
-#### Structs
-```ura
-struct User:
-    name char[]
-    age i32
-    active bool
-
-main():
-    user User
-    user.age = 25
-```
-
-#### References
-```ura
-main():
-    a i32 = 10
-    b ref i32 = a    // b is a reference to a
-    b = 20           // modifies a through the reference
-    return a         // returns 20
-```
-
-#### C Interop
-```ura
-proto fn puts(str char[]) i32
-proto fn malloc(size i32) pointer
-
-main():
-    puts("Hello, World!")
-    return 0
-```
-
-## Supported Language Features
-
-### Data Types
-- `i8`, `i16`, `i32`, `i64` - Signed integers
-- `u8`, `u16`, `u32`, `u64` - Unsigned integers
-- `f32`, `f64` - Floating point
-- `char` - A byte that prints as a character and holds `'x'` literals
-- `char[]` - The string type; `chars` no longer exists
-- `bool` - Boolean type (`True`, `False`)
-- `void` - No return value
-- `pointer` - Generic pointer type
-- `array`, `List` - Aggregate types
-
-A trailing `?` marks a type nullable, as in `char[]?`.
-
-### Keywords
-
-Each group below is a distinct colour in the grammar, so unrelated words never
-share one.
-
-| Group | Words | Scope |
+| Setting | Default | Meaning |
 |---|---|---|
-| Conditional | `if` `elif` `else` `match` `case` `default` | `keyword.control.conditional` |
-| Loop | `while` `loop` `for` `in` `by` `break` `continue` | `keyword.control.loop` |
-| Return | `return` `ret` | `keyword.control.flow.return` |
-| Exception | `try` `catch` `throw` | `keyword.control.exception` |
-| Allocation | `new` `clean` | `keyword.operator.new` |
-| Word operators | `and` `or` `not` `is` | `keyword.operator.logical` |
-| Cast | `as` | `keyword.operator.cast` |
-| Receiver | `self` | `variable.language.self` |
-| Declaration | `fn` `struct` `enum` `mod` `operator` | `keyword.declaration` |
-| Modifier | `pub` `proto` `ref` | `storage.modifier` |
-| Import | `use` `link` | `keyword.control.import` |
-| Types | `i8` `i16` `i32` `i64` `u8` `u16` `u32` `u64` `f32` `f64` `bool` `char` `void` `pointer` `array` `List` | `storage.type` |
-| Builtins | `output` `errput` `typeof` `sizeof` | `support.function.builtin` |
-| Directive | `@if` `@elif` `@else` `@no-warn` | `keyword.control.directive` |
-| Literals | `True` `False` `null` | `constant.language` |
+| `ura.compilerPath` | `""` | Compiler used for diagnostics and Run/Build. Empty: `<workspace>/bin/ura` if it exists, otherwise `ura` from `PATH`. |
+| `ura.lint.enable` | `true` | Turn compiler diagnostics on or off. |
 
-`operator drop`, `operator +`, `operator +=` and friends get
-`keyword.other.special-method` on the operator itself.
+`.ura` files default to this extension as formatter, with format on save; change
+`editor.formatOnSave` under `[ura]` to turn that off.
 
-### Operators
-- **Arithmetic**: `+`, `-`, `*`, `/`, `%`
-- **Comparison**: `==`, `!=`, `<`, `>`, `<=`, `>=`
-- **Logical**: `&&`, `||`, `!` (and the words `and`, `or`, `not`, `is`)
-- **Bitwise**: `&`, `|`, `^`, `~`, `<<`, `>>`
-- **Assignment**: `=`, `+=`, `-=`, `*=`, `/=`, `%=`
-- **Compound bitwise**: `&=`, `|=`, `^=`, `<<=`, `>>=`
+## Build, test, install
 
-### Built-in Functions
-- `output()` - prints any value, including a whole struct
-- `errput()` - the same, in red on stderr
-- `typeof()`, `sizeof()` - compile-time type queries
+Requirements: Node.js, and the `code` command for installing and E2E tests.
 
-### Comments
-```ura
-// Single line comment
-
-/*
-   Multi-line
-   comment
-*/
-```
-
-## Editor Configuration
-
-The extension automatically configures the following settings for `.ura` files:
-
-- **Tab Size**: 4 spaces
-- **Insert Spaces**: Enabled
-- **Auto Indent**: Advanced
-- **Trim Auto Whitespace**: Enabled
-
-You can override these in your VSCode settings if needed.
-
-## Syntax Highlighting
-
-The extension provides highlighting for:
-
-- Keywords and control flow statements
-- Data types and type declarations
-- Function definitions and calls
-- Struct definitions
-- String literals with escape sequences
-- Printf-style format specifiers in strings
-- Character literals
-- Numeric literals (integers and floats)
-- Comments (line and block)
-- Operators
-- Language constants (`True`, `False`, `null`)
-- Built-in functions
-
-## Development
-
-### Building from Source
-
-Prerequisites:
-- Node.js and npm
-- `@vscode/vsce` package (installed automatically via npm)
-
-Build and install:
 ```bash
-make install
+make            # npm install + compile (tsc -b: server, client, tests)
+make lint       # ESLint, including the layer rules below
+make test       # unit tests: server core, no VS Code (also reads ../src/tests/*.md)
+make test-e2e   # end-to-end: a real VS Code (the one behind `code`) with the extension
+make package    # build ura-lang-<version>.vsix
+make install    # package and install into VS Code
+make uninstall  # remove it from VS Code
+make clean      # remove out/ and the .vsix
+make fclean     # also remove node_modules and .vscode-test
 ```
 
-Other targets: `make build` (compile only), `make package` (create the
-`.vsix`), `make clean`.
+From the compiler side, `source src/config.sh` gives an `extension` command
+that does `make install` for you. After installing, reload VS Code.
 
-### Project Structure
+## Architecture
+
+The extension is a language client; the language itself lives in a language
+server (LSP) running in its own Node process.
+
 ```
-.
-├── package.json                 # Extension manifest
-├── language-configuration.json  # Language configuration
-├── syntaxes/
-│   └── ura.tmLanguage.json     # TextMate grammar
-├── icons/
-│   ├── icon.png                # Extension icon
-│   ├── icon.svg                # Extension icon (SVG)
-│   └── file.json               # File icon theme
-├── Makefile                    # Build and install targets
-└── README.md                   # This file
+client/src/                 runs in VS Code: starts the server, registers commands
+    extension.ts            wiring only
+    services/               logger (the "Ura" output), language client
+    commands/               Run / Build
+server/src/                 runs as its own process: speaks LSP
+    server.ts               builds the services, registers every feature
+    services/               documents/workspace, config, logger, compiler
+    features/               one LSP request per file (completion, hover, rename, ...)
+    core/                   the language: pure functions, no VS Code / LSP / file system
+        keywords.ts         the words the language has
+        parser.ts           functions, structs, methods, variables, calls, resolution
+        imports.ts          following `use`
+        symbols.ts          declarations, hovers, outline
+        references.ts       occurrences, rename checks
+        format.ts           the formatter
+        compiler.ts         reading the compiler's errors
+test/unit/                  node --test on server/src/core
+test/e2e/                   @vscode/test-electron + mocha, fixtures/*.ura
+syntaxes/  snippets/  language-configuration.json  icons/
 ```
 
-### Uninstalling
+Rules, enforced by TypeScript project references and ESLint:
 
-To remove the extension:
-```bash
-rm -rf ~/.vscode/extensions/mohamedhrima.ura-lang-*
-```
+- `core` never imports `vscode`, LSP or `fs`: it takes text and callbacks.
+- A feature turns an LSP request into core calls and back, nothing else; features
+  never import each other. Adding one = a file in `features/` + a line in `server.ts`.
+- Services are built once and passed in; nothing reads settings or globals directly.
+- The client never imports server code.
+- A request handler never throws (it logs and returns an empty answer), except
+  for errors meant for the user, like a refused rename.
 
-Then restart VSCode.
+## Keeping up with the compiler
 
-## About Ura Language
+When the compiler learns something new, update in this order:
 
-Ura is a work-in-progress compiled programming language that compiles to LLVM IR. The compiler is written in C and uses LLVM for code generation and optimization.
-
-**Key Features:**
-- Statically typed
-- Python-like indentation syntax
-- Direct compilation to native code via LLVM
-- C library interoperability
-- References and pointers
-- Module system
-
-For more information about the Ura language:
-- [Ura Compiler Repository](https://github.com/mohammedhrima/ura-lang)
-- [Language Documentation](https://github.com/mohammedhrima/ura-lang#readme)
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit issues or pull requests.
+1. `server/src/core/keywords.ts` — mirror the `keywords[]` / `specials[]`
+   tables in `src/main.c`.
+2. `syntaxes/ura.tmLanguage.json` — the same words for highlighting.
+3. `server/src/core/parser.ts` (and `format.ts` for new operators) — if the
+   feature declares or writes something new.
+4. Record a compiler test with `copy` (it lands in `../src/tests/`, which
+   `make test` also reads: the formatter is checked against every program there)
+   and add tests in `test/unit/` (and `test/e2e/` for a new editor feature).
 
 ## License
 
-MIT License - see LICENSE file for details
-
-## Author
-
-**Hrima Mohammed**
-- GitHub: [@mohamedhrima](https://github.com/mohammedhrima)
-
-## Changelog
-
-### 0.0.1 (Initial Release)
-- Syntax highlighting for all Ura language constructs
-- Smart indentation with Python-like block structure
-- Auto-closing pairs for brackets, quotes, and parentheses
-- Comment toggling support
-- Custom file icons
-- Editor configuration defaults
-
-## Acknowledgments
-
-- Inspired by Python and C language extensions
-- Built with VSCode Extension API
-- TextMate grammar for syntax highlighting
+MIT, see [LICENSE](LICENSE).
